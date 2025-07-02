@@ -38,7 +38,7 @@ export default {
         const embed = new EmbedBuilder()
             .setTitle(`${interaction.user.tag}'s level`)
             .setDescription(
-                `**Level:** ${ln}\n**XP:** ${level.xp! - current_threshold} / ${current_threshold} exp\n\n${progress} **${percentage.toFixed(2)}%**`,
+                `**Level:** ${ln}\n**XP:** ${level.xp! - current_threshold} / ${current_threshold} exp\n\n${progress} **${percentage.toFixed(2)}%**\n\n-# Levels allow you to unlock features. Run /perks to see all the available features.`,
             )
             .setFooter({
                 text: `Mysticord - Level system`,
