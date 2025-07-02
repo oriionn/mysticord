@@ -11,6 +11,7 @@ This project was made as part of the Summer of Making, for the Converge which co
 The project has multiple features, such as :
 - Subscribe and unsubscribe from a list to get found by people
 - Stop a discussion whenever you like
+- Be able to change your username: by default “Anonymous”, you can change it with the command `/username <username>`. So you can use a fun nickname or reference :3
 - Level system : The more you talk, the more levels you have, the more features you can use.
 - Sending attachments (Only available from level 3 upwards)
 - Native voice message integration (Only available from level 5 upwards)
