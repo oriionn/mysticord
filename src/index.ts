@@ -12,12 +12,15 @@ import {
     Routes,
     ChannelType,
     Partials,
+    ButtonInteraction,
 } from "discord.js";
 import { readdirSync } from "fs";
 import db from "./database";
 import tables from "./database/tables";
-import { eq, or } from "drizzle-orm";
+import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "./constants";
+import { getChatSessions, stopChatSessions } from "./utils/chats";
+import { randomInt } from "./utils/random";
 
 // Logs
 await configure({
@@ -120,7 +123,7 @@ client.on(Events.MessageCreate, async (message) => {
             ),
         );
 
-    if (sessions.length === 0) return;
+    if (sessions.length === 0) return message.reply(Messages.NO_CHAT_SESSIONS);
 
     if (message.content.length > 1900)
         return message.reply({
@@ -171,6 +174,73 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
                 content: "There was an error while executing this command!",
                 flags: MessageFlags.Ephemeral,
             });
+        }
+    }
+});
+
+client.on(Events.InteractionCreate, async (interaction: ButtonInteraction) => {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId === "unregister") {
+        await stopChatSessions(interaction.user, interaction.client);
+
+        await db
+            .delete(tables.users)
+            .where(eq(tables.users.discord_id, interaction.user.id));
+
+        if (interaction.message.deletable) interaction.message.delete();
+
+        await interaction.reply(Messages.UNREGISTERED);
+    } else if (interaction.customId === "reroll") {
+        await stopChatSessions(interaction.user, interaction.client);
+
+        if (interaction.message.deletable) interaction.message.delete();
+
+        let chats = await db.select().from(tables.chats);
+        const firsts = chats.map((c) => c.first);
+        const seconds = chats.map((c) => c.second);
+
+        let users = await db
+            .select()
+            .from(tables.users)
+            .where(
+                and(
+                    not(eq(tables.users.discord_id, interaction.user.id)),
+                    notInArray(tables.users.discord_id, firsts),
+                    notInArray(tables.users.discord_id, seconds),
+                ),
+            );
+
+        if (users.length === 0) {
+            return await interaction.reply(Messages.NO_USER_AVAILABLE);
+        }
+
+        let user = users[randomInt(0, users.length - 1)];
+        const chat: typeof tables.chats.$inferInsert = {
+            first: interaction.user.id,
+            second: user!.discord_id,
+        };
+
+        await db.insert(tables.chats).values(chat);
+        try {
+            let discordUser = interaction.client.users.cache.get(
+                user!.discord_id,
+            );
+
+            let dm = await discordUser?.createDM();
+            dm?.send(Messages.OTHER_USER_ROLL);
+
+            dm?.send(Messages.OTHER_USER_ROLL_WARNING);
+
+            return await interaction.reply(Messages.USER_ROLL);
+        } catch (e) {
+            console.error(e);
+
+            await db
+                .delete(tables.chats)
+                .where(eq(tables.chats.first, interaction.user.id));
+
+            return await interaction.reply(Messages.ROLL_ERROR);
         }
     }
 });

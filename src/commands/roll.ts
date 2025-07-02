@@ -9,6 +9,7 @@ import tables from "../database/tables";
 import { randomInt } from "../utils/random";
 import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "../constants";
+import { getChatSessions } from "../utils/chats";
 
 export default {
     data: {
@@ -28,15 +29,7 @@ export default {
             return await interaction.reply(Messages.NOT_REGISTERED);
         }
 
-        let currentUserChats = await db
-            .select()
-            .from(tables.chats)
-            .where(
-                or(
-                    eq(tables.chats.first, interaction.user.id),
-                    eq(tables.chats.second, interaction.user.id),
-                ),
-            );
+        let currentUserChats = await getChatSessions(interaction.user.id);
 
         if (currentUserChats.length !== 0) {
             const confirm = new ButtonBuilder()
