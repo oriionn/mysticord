@@ -9,8 +9,8 @@ import { eq } from "drizzle-orm";
 
 export default {
     data: {
-        name: "register",
-        description: "Register for the random meet",
+        name: "unregister",
+        description: "Unregister for the random meet",
         integration_types: [1],
         contexts: [1],
     },
@@ -20,20 +20,18 @@ export default {
             .from(tables.users)
             .where(eq(tables.users.discord_id, interaction.user.id));
 
-        if (users.length !== 0) {
+        if (users.length === 0) {
             return interaction.reply(
-                `:x: | You are already registered for the random meet.`,
+                `:x: | You are not registered for the random meet.`,
             );
         }
 
-        const user: typeof tables.users.$inferInsert = {
-            discord_id: interaction.user.id,
-        };
-
-        await db.insert(tables.users).values(user);
+        await db
+            .delete(tables.users)
+            .where(eq(tables.users.discord_id, interaction.user.id));
 
         interaction.reply(
-            `:white_check_mark: | You are successfully registered for the random meet.`,
+            `:white_check_mark: | You are successfully unregistered for the random meet.`,
         );
     },
 };
