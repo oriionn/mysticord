@@ -25,20 +25,24 @@ import { randomInt } from "./utils/random";
 import { getLevel } from "./utils/level";
 import { log } from "console";
 import { sendVoice } from "./utils/voice";
+import { getFileSink } from "@logtape/file";
 
 // Logs
 await configure({
     sinks: {
         console: getConsoleSink({ formatter: prettyFormatter }),
+        file: getFileSink("mysticord.log", {
+            lazy: true,
+        }),
     },
     loggers: [
         {
             category: "mysticord",
-            sinks: ["console"],
+            sinks: ["console", "file"],
         },
         {
             category: "discord.js",
-            sinks: ["console"],
+            sinks: ["console", "file"],
         },
         {
             category: ["logtape", "meta"],
