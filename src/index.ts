@@ -13,6 +13,7 @@ import {
     ChannelType,
     Partials,
     ButtonInteraction,
+    AttachmentBuilder,
 } from "discord.js";
 import { readdirSync } from "fs";
 import db from "./database";
@@ -139,9 +140,55 @@ client.on(Events.MessageCreate, async (message) => {
 
     let discordContact = client.users.cache.get(contact!);
 
+    let usernames = await db
+        .select()
+        .from(tables.username)
+        .where(eq(tables.username.discord_id, message.author.id))
+        .limit(1);
+
+    let username = "Anonymous";
+    if (usernames.length !== 0) {
+        username = usernames[0]?.username!;
+    }
+
+    let levels = await db
+        .select()
+        .from(tables.level)
+        .where(eq(tables.level.discord_id, message.author.id))
+        .limit(1);
+
+    if (levels.length === 0) {
+        const l: typeof tables.level.$inferInsert = {
+            discord_id: message.author.id,
+            xp: 0,
+        };
+
+        await db.insert(tables.level).values(l);
+        levels.push(l);
+    }
+
+    let level = levels[0];
+    level!.xp! += 1;
+    await db
+        .update(tables.level)
+        .set({ xp: level!.xp })
+        .where(eq(tables.level.discord_id, message.author.id));
+
+    const attachments = message.attachments.map(
+        (a) =>
+            new AttachmentBuilder(a.attachment, {
+                name: a.name,
+                description: a.description,
+                spoiler: a.spoiler,
+            }),
+    );
+
     try {
         let dm = await discordContact!.createDM();
-        dm?.send(`**Anonymous:** ${message.content}`);
+        dm?.send({
+            content: `**${username}:** ${message.content}`,
+            files: attachments,
+        });
     } catch (e) {
         message.reply(Messages.MESSAGE_ERROR_OCCURED);
     }

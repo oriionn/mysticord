@@ -18,4 +18,6 @@ export enum Messages {
 
     CHAT_SESSION_STOP = "🚫 | Your contact has stopped the chat session.",
     CHAT_SESSION_STOP_SELF = "🚫 | You have stopped the chat session.",
+
+    USERNAME_CHANGED = ":white_check_mark: | Your username has been successfully replaced by `",
 }
