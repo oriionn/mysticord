@@ -15,6 +15,7 @@ export enum Messages {
 
     MESSAGE_TOO_LONG = ":x: | Message too long, impossible to send to your contact.",
     MESSAGE_ERROR_OCCURED = ":x: | An error has occurred while sending to your contact, please try again.",
+    VOICE_MESSAGE_NOT_LEVEL = ":x: | Voice messages are only available when you are on level 5.",
 
     CHAT_SESSION_STOP = "🚫 | Your contact has stopped the chat session.",
     CHAT_SESSION_STOP_SELF = "🚫 | You have stopped the chat session.",

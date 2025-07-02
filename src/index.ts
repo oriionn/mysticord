@@ -193,13 +193,17 @@ client.on(Events.MessageCreate, async (message) => {
         let dm = await discordContact!.createDM();
 
         if (message.flags.bitfield === 8192) {
-            dm?.send({
-                content: `**${username}:**`,
-            });
+            if (getLevel(level!.xp!).level >= 5) {
+                dm?.send({
+                    content: `**${username}:**`,
+                });
 
-            const ass = message.attachments.map((a) => a);
-            const a = ass[0];
-            return sendVoice(a?.url!, dm.id, a?.waveform!, a?.duration!);
+                const ass = message.attachments.map((a) => a);
+                const a = ass[0];
+                return sendVoice(a?.url!, dm.id, a?.waveform!, a?.duration!);
+            } else {
+                return await message.reply(Messages.VOICE_MESSAGE_NOT_LEVEL);
+            }
         }
 
         dm?.send({

@@ -32,13 +32,13 @@ export default {
             current_threshold,
         } = getLevel(level.xp!);
         let percentage =
-            ((level.xp! - current_threshold) / next_threshold) * 100;
+            ((level.xp! - current_threshold) / current_threshold) * 100;
         let progress = progress_bar(percentage);
 
         const embed = new EmbedBuilder()
             .setTitle(`${interaction.user.tag}'s level`)
             .setDescription(
-                `**Level:** ${ln} / **XP:** ${level.xp! - current_threshold} exp\n\n${progress} **${percentage}%**`,
+                `**Level:** ${ln}\n**XP:** ${level.xp! - current_threshold} / ${current_threshold} exp\n\n${progress} **${percentage.toFixed(2)}%**`,
             )
             .setFooter({
                 text: `Mysticord - Level system`,
