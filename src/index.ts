@@ -22,6 +22,9 @@ import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "./constants";
 import { getChatSessions, stopChatSessions } from "./utils/chats";
 import { randomInt } from "./utils/random";
+import { getLevel } from "./utils/level";
+import { log } from "console";
+import { sendVoice } from "./utils/voice";
 
 // Logs
 await configure({
@@ -174,22 +177,37 @@ client.on(Events.MessageCreate, async (message) => {
         .set({ xp: level!.xp })
         .where(eq(tables.level.discord_id, message.author.id));
 
-    const attachments = message.attachments.map(
-        (a) =>
-            new AttachmentBuilder(a.attachment, {
-                name: a.name,
-                description: a.description,
-                spoiler: a.spoiler,
-            }),
-    );
+    let attachments = [];
+    if (getLevel(level!.xp!).level >= 3) {
+        attachments = message.attachments.map(
+            (a) =>
+                new AttachmentBuilder(a.attachment, {
+                    name: a.name,
+                    description: a.description,
+                    spoiler: a.spoiler,
+                }),
+        );
+    }
 
     try {
         let dm = await discordContact!.createDM();
+
+        if (message.flags.bitfield === 8192) {
+            dm?.send({
+                content: `**${username}:**`,
+            });
+
+            const ass = message.attachments.map((a) => a);
+            const a = ass[0];
+            return sendVoice(a?.url!, dm.id, a?.waveform!, a?.duration!);
+        }
+
         dm?.send({
             content: `**${username}:** ${message.content}`,
             files: attachments,
         });
     } catch (e) {
+        console.error(e);
         message.reply(Messages.MESSAGE_ERROR_OCCURED);
     }
 });
