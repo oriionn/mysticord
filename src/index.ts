@@ -14,6 +14,9 @@ import {
     Partials,
     ButtonInteraction,
     AttachmentBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ActionRowBuilder,
 } from "discord.js";
 import { readdirSync } from "fs";
 import db from "./database";
@@ -261,12 +264,12 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
         console.error(error);
         if (interaction.replied || interaction.deferred) {
             await interaction.followUp({
-                content: "There was an error while executing this command!",
+                content: Messages.ERROR_EXECUTING_COMMAND,
                 flags: MessageFlags.Ephemeral,
             });
         } else {
             await interaction.reply({
-                content: "There was an error while executing this command!",
+                content: Messages.ERROR_EXECUTING_COMMAND,
                 flags: MessageFlags.Ephemeral,
             });
         }
@@ -336,6 +339,74 @@ client.on(Events.InteractionCreate, async (interaction: ButtonInteraction) => {
                 .where(eq(tables.chats.first, interaction.user.id));
 
             return await interaction.reply(Messages.ROLL_ERROR);
+        }
+    } else if (interaction.customId === "confirm-reveal") {
+        let sessions = await getChatSessions(interaction.user.id);
+        if (sessions.length === 0)
+            return await interaction.reply(Messages.NO_CHAT_SESSIONS);
+        let session = sessions[0];
+
+        let contact = session!.first;
+        if (contact === interaction.user.id) {
+            contact = session!.second;
+        }
+
+        try {
+            let contactUser = interaction.client.users.cache.get(contact!);
+            let dm = await contactUser?.createDM();
+
+            let button = new ButtonBuilder()
+                .setCustomId("reveal")
+                .setLabel("Reveal")
+                .setStyle(ButtonStyle.Primary);
+
+            let row = new ActionRowBuilder().addComponents(button);
+
+            await dm?.send({
+                content: Messages.REVEAL,
+                components: [row],
+            });
+
+            return await interaction.reply(Messages.REVEAL_SENT);
+        } catch (e) {
+            console.error(e);
+            return await interaction.reply(Messages.REVEAL_IMPOSSIBLE);
+        }
+    } else if (interaction.customId === "reveal") {
+        let sessions = await getChatSessions(interaction.user.id);
+        if (sessions.length === 0)
+            return await interaction.reply(Messages.NO_CHAT_SESSIONS);
+        let session = sessions[0];
+
+        let contact = session!.first;
+        if (contact === interaction.user.id) {
+            contact = session!.second;
+        }
+
+        try {
+            let contactUser = interaction.client.users.cache.get(contact!);
+            let dm = await contactUser?.createDM();
+
+            await dm?.send({
+                content:
+                    Messages.REVEALED +
+                    interaction.user.tag +
+                    "` (<@" +
+                    interaction.user.id +
+                    ">).",
+            });
+
+            return await interaction.reply({
+                content:
+                    Messages.REVEALED +
+                    contactUser?.tag +
+                    "` (<@" +
+                    contactUser?.id +
+                    ">).",
+            });
+        } catch (e) {
+            console.error(e);
+            return await interaction.reply(Messages.REVEAL_IMPOSSIBLE_BIS);
         }
     }
 });
