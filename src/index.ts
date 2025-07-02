@@ -37,6 +37,10 @@ await configure({
             sinks: ["console"],
         },
         {
+            category: "discord.js",
+            sinks: ["console"],
+        },
+        {
             category: ["logtape", "meta"],
             sinks: [],
         },
@@ -240,6 +244,12 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
         });
         return;
     }
+
+    let loggerr = getLogger(["discord.js"]);
+    loggerr.trace("User {user} executed {command}", {
+        user: interaction.user.tag,
+        command: `/${interaction.commandName}`,
+    });
 
     try {
         await command.execute(interaction);
