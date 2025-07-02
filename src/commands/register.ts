@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import db from "../database";
 import tables from "../database/tables";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { Messages } from "../constants";
 
 export default {

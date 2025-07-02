@@ -1,11 +1,14 @@
 import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
     CommandInteraction,
     SlashCommandBuilder,
     type Interaction,
 } from "discord.js";
 import db from "../database";
 import tables from "../database/tables";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { Messages } from "../constants";
 
 export default {
@@ -23,6 +26,30 @@ export default {
 
         if (users.length === 0) {
             return await interaction.reply(Messages.NOT_REGISTERED);
+        }
+
+        let userChats = await db
+            .select()
+            .from(tables.chats)
+            .where(
+                or(
+                    eq(tables.chats.first, interaction.user.id),
+                    eq(tables.chats.second, interaction.user.id),
+                ),
+            );
+
+        if (userChats.length !== 0) {
+            const confirm = new ButtonBuilder()
+                .setCustomId("unregister")
+                .setLabel("Unregister")
+                .setStyle(ButtonStyle.Danger);
+
+            const row = new ActionRowBuilder().addComponents(confirm);
+
+            return await interaction.reply({
+                content: Messages.CONFIRM_REGISTER,
+                components: [row],
+            });
         }
 
         await db
