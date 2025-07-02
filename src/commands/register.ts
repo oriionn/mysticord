@@ -6,6 +6,7 @@ import {
 import db from "../database";
 import tables from "../database/tables";
 import { eq } from "drizzle-orm";
+import { Messages } from "../constants";
 
 export default {
     data: {
@@ -21,9 +22,7 @@ export default {
             .where(eq(tables.users.discord_id, interaction.user.id));
 
         if (users.length !== 0) {
-            return await interaction.reply(
-                `:x: | You are already registered for the random meet.`,
-            );
+            return await interaction.reply(Messages.ALREADY_REGISTERED);
         }
 
         const user: typeof tables.users.$inferInsert = {
@@ -32,8 +31,6 @@ export default {
 
         await db.insert(tables.users).values(user);
 
-        await interaction.reply(
-            `:white_check_mark: | You are successfully registered for the random meet.`,
-        );
+        await interaction.reply(Messages.REGISTERED);
     },
 };

@@ -8,6 +8,7 @@ import db from "../database";
 import tables from "../database/tables";
 import { randomInt } from "../utils/random";
 import { and, eq, not, notInArray, or } from "drizzle-orm";
+import { Messages } from "../constants";
 
 export default {
     data: {
@@ -24,9 +25,7 @@ export default {
             .limit(1);
 
         if (currentUser.length === 0) {
-            return await interaction.reply(
-                `:x: | You have not registered for the random meet.`,
-            );
+            return await interaction.reply(Messages.NOT_REGISTERED);
         }
 
         let currentUserChats = await db
@@ -48,7 +47,7 @@ export default {
             const row = new ActionRowBuilder().addComponents(confirm);
 
             return await interaction.reply({
-                content: `❓ | Are you sure you want to reroll?`,
+                content: Messages.REROLL_CONFIRM,
                 components: [row],
             });
         }
@@ -69,9 +68,7 @@ export default {
             );
 
         if (users.length === 0) {
-            return await interaction.reply(
-                `:x: | No user available for random meet.`,
-            );
+            return await interaction.reply(Messages.NO_USER_AVAILABLE);
         }
 
         let user = users[randomInt(0, users.length - 1)];
@@ -87,17 +84,11 @@ export default {
             );
 
             let dm = await discordUser?.createDM();
-            dm?.send(
-                `🎲 | **Hello! Someone's found you at random, let's talk!**`,
-            );
+            dm?.send(Messages.OTHER_USER_ROLL);
 
-            dm?.send(`
-                ⚠️ | **Every message you send to the bot will now be transcribed for it.**
-            `);
+            dm?.send(Messages.OTHER_USER_ROLL_WARNING);
 
-            return await interaction.reply(
-                `:white_check_mark: | You've just found someone at random! **Every message you send to the bot will now be transcribed for it.**`,
-            );
+            return await interaction.reply(Messages.USER_ROLL);
         } catch (e) {
             console.error(e);
 
@@ -105,9 +96,7 @@ export default {
                 .delete(tables.chats)
                 .where(eq(tables.chats.first, interaction.user.id));
 
-            return await interaction.reply(
-                `:x: | An error occurred during the roll, please try again.`,
-            );
+            return await interaction.reply(Messages.ROLL_ERROR);
         }
     },
 };

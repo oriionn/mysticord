@@ -6,6 +6,7 @@ import {
 import db from "../database";
 import tables from "../database/tables";
 import { eq } from "drizzle-orm";
+import { Messages } from "../constants";
 
 export default {
     data: {
@@ -21,17 +22,13 @@ export default {
             .where(eq(tables.users.discord_id, interaction.user.id));
 
         if (users.length === 0) {
-            return await interaction.reply(
-                `:x: | You are not registered for the random meet.`,
-            );
+            return await interaction.reply(Messages.NOT_REGISTERED);
         }
 
         await db
             .delete(tables.users)
             .where(eq(tables.users.discord_id, interaction.user.id));
 
-        await interaction.reply(
-            `:white_check_mark: | You are successfully unregistered for the random meet.`,
-        );
+        await interaction.reply(Messages.UNREGISTERED);
     },
 };
