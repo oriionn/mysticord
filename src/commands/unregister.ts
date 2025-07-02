@@ -21,7 +21,7 @@ export default {
             .where(eq(tables.users.discord_id, interaction.user.id));
 
         if (users.length === 0) {
-            return interaction.reply(
+            return await interaction.reply(
                 `:x: | You are not registered for the random meet.`,
             );
         }
@@ -30,7 +30,7 @@ export default {
             .delete(tables.users)
             .where(eq(tables.users.discord_id, interaction.user.id));
 
-        interaction.reply(
+        await interaction.reply(
             `:white_check_mark: | You are successfully unregistered for the random meet.`,
         );
     },

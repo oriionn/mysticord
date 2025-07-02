@@ -15,6 +15,13 @@
       "when": 1751423343606,
       "tag": "0001_cute_starhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1751448853178,
+      "tag": "0002_sharp_punisher",
+      "breakpoints": true
     }
   ]
 }

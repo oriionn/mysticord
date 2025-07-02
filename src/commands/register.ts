@@ -21,7 +21,7 @@ export default {
             .where(eq(tables.users.discord_id, interaction.user.id));
 
         if (users.length !== 0) {
-            return interaction.reply(
+            return await interaction.reply(
                 `:x: | You are already registered for the random meet.`,
             );
         }
@@ -32,7 +32,7 @@ export default {
 
         await db.insert(tables.users).values(user);
 
-        interaction.reply(
+        await interaction.reply(
             `:white_check_mark: | You are successfully registered for the random meet.`,
         );
     },
