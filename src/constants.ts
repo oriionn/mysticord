@@ -17,4 +17,5 @@ export enum Messages {
     MESSAGE_ERROR_OCCURED = ":x: | An error has occurred while sending to your contact, please try again.",
 
     CHAT_SESSION_STOP = "🚫 | Your contact has stopped the chat session.",
+    CHAT_SESSION_STOP_SELF = "🚫 | You have stopped the chat session.",
 }
