@@ -54,6 +54,8 @@ const client = new Client({
 
 // @ts-ignore
 client.commands = new Collection();
+// @ts-ignore
+client.cooldown = new Collection();
 
 const foldersPath = join(__dirname, "commands");
 const commandsFiles = readdirSync(foldersPath);
@@ -171,11 +173,21 @@ client.on(Events.MessageCreate, async (message) => {
     }
 
     let level = levels[0];
-    level!.xp! += 1;
-    await db
-        .update(tables.level)
-        .set({ xp: level!.xp })
-        .where(eq(tables.level.discord_id, message.author.id));
+    // @ts-ignore
+    let cooldown = client.cooldown.get(message.author.id);
+    if (
+        !cooldown ||
+        (cooldown && new Date().getTime() - cooldown.getTime() >= 5000)
+    ) {
+        level!.xp! += 1;
+        await db
+            .update(tables.level)
+            .set({ xp: level!.xp })
+            .where(eq(tables.level.discord_id, message.author.id));
+
+        // @ts-ignore
+        client.cooldown.set(message.author.id, new Date());
+    }
 
     let attachments = [];
     if (getLevel(level!.xp!).level >= 3) {
