@@ -9,7 +9,7 @@ import tables from "../database/tables";
 import { randomInt } from "../utils/random";
 import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "../constants";
-import { getChatSessions } from "../utils/chats";
+import { getAllAvailableUser, getChatSessions, hasChat } from "../utils/chats";
 
 export default {
     data: {
@@ -29,9 +29,7 @@ export default {
             return await interaction.reply(Messages.NOT_REGISTERED);
         }
 
-        let currentUserChats = await getChatSessions(interaction.user.id);
-
-        if (currentUserChats.length !== 0) {
+        if (!(await hasChat(interaction.user))) {
             const confirm = new ButtonBuilder()
                 .setCustomId("reroll")
                 .setLabel("Reroll")
@@ -46,22 +44,7 @@ export default {
             });
         }
 
-        let chats = await db.select().from(tables.chats);
-        const firsts = chats.map((c) => c.first);
-        const seconds = chats.map((c) => c.second);
-
-        let users = await db
-            .select()
-            .from(tables.users)
-            .where(
-                and(
-                    not(eq(tables.users.discord_id, interaction.user.id)),
-                    // @ts-ignore
-                    notInArray(tables.users.discord_id, firsts),
-                    // @ts-ignore
-                    notInArray(tables.users.discord_id, seconds),
-                ),
-            );
+        let users = await getAllAvailableUser(interaction.user.id);
 
         if (users.length === 0) {
             return await interaction.reply(Messages.NO_USER_AVAILABLE);
@@ -81,7 +64,6 @@ export default {
 
             let dm = await discordUser?.createDM();
             dm?.send(Messages.OTHER_USER_ROLL);
-
             dm?.send(Messages.OTHER_USER_ROLL_WARNING);
 
             return await interaction.reply(Messages.USER_ROLL);

@@ -1,5 +1,5 @@
 import type { ButtonInteraction } from "discord.js";
-import { stopChatSessions } from "../utils/chats";
+import { getAllAvailableUser, stopChatSessions } from "../utils/chats";
 import db from "../database";
 import tables from "../database/tables";
 import { and, eq, not, notInArray } from "drizzle-orm";
@@ -10,22 +10,7 @@ export default async function (interaction: ButtonInteraction) {
     await stopChatSessions(interaction.user, interaction.client);
     if (interaction.message.deletable) interaction.message.delete();
 
-    let chats = await db.select().from(tables.chats);
-    const firsts = chats.map((c) => c.first);
-    const seconds = chats.map((c) => c.second);
-
-    let users = await db
-        .select()
-        .from(tables.users)
-        .where(
-            and(
-                not(eq(tables.users.discord_id, interaction.user.id)),
-                // @ts-ignore
-                notInArray(tables.users.discord_id, firsts),
-                // @ts-ignore
-                notInArray(tables.users.discord_id, seconds),
-            ),
-        );
+    let users = await getAllAvailableUser(interaction.user.id);
 
     if (users.length === 0) {
         return await interaction.reply(Messages.NO_USER_AVAILABLE);

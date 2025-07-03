@@ -1,8 +1,6 @@
-import {
-    type CommandInteraction,
-} from "discord.js";
+import { type CommandInteraction } from "discord.js";
 import { Messages } from "../constants";
-import { getChatSessions, stopChatSessions } from "../utils/chats";
+import { hasChat, stopChatSessions } from "../utils/chats";
 
 export default {
     data: {
@@ -12,8 +10,7 @@ export default {
         contexts: [1],
     },
     async execute(interaction: CommandInteraction) {
-        let chats = await getChatSessions(interaction.user.id);
-        if (chats.length === 0) {
+        if (await hasChat(interaction.user)) {
             return await interaction.reply(Messages.NO_CHAT_SESSIONS);
         }
 

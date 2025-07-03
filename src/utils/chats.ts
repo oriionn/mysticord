@@ -1,4 +1,4 @@
-import { eq, or } from "drizzle-orm";
+import { and, eq, not, notInArray, or } from "drizzle-orm";
 import db from "../database";
 import tables from "../database/tables";
 import { Client, User } from "discord.js";
@@ -49,4 +49,30 @@ export function getContact(
     }
 
     return contact;
+}
+
+export async function getAllAvailableUser(userId: string) {
+    let chats = await db.select().from(tables.chats);
+    const firsts = chats.map((c) => c.first);
+    const seconds = chats.map((c) => c.second);
+
+    let users = await db
+        .select()
+        .from(tables.users)
+        .where(
+            and(
+                not(eq(tables.users.discord_id, userId)),
+                // @ts-ignore
+                notInArray(tables.users.discord_id, firsts),
+                // @ts-ignore
+                notInArray(tables.users.discord_id, seconds),
+            ),
+        );
+
+    return users;
+}
+
+export async function hasChat(user: User) {
+    let sessions = await getChatSessions(user.id);
+    return sessions.length === 0;
 }

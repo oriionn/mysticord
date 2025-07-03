@@ -4,7 +4,7 @@ import {
     ButtonStyle,
     CommandInteraction,
 } from "discord.js";
-import { getChatSessions } from "../utils/chats";
+import { getChatSessions, hasChat } from "../utils/chats";
 import { Messages } from "../constants";
 
 export default {
@@ -15,8 +15,7 @@ export default {
         contexts: [1],
     },
     async execute(interaction: CommandInteraction) {
-        let sessions = await getChatSessions(interaction.user.id);
-        if (sessions.length === 0)
+        if (await hasChat(interaction.user))
             return await interaction.reply(Messages.NO_CHAT_SESSIONS);
 
         let button = new ButtonBuilder()
