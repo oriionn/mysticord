@@ -25,6 +25,7 @@ export async function sendVoice(
     );
 
     const blob = await remoteFile.blob();
+    // @ts-ignore
     const file = new File([blob], "voice-message.ogg", { type: "audio/ogg" });
     formData.append("files[0]", file);
 

@@ -41,6 +41,7 @@ export default {
 
             return await interaction.reply({
                 content: Messages.REROLL_CONFIRM,
+                // @ts-ignore
                 components: [row],
             });
         }
@@ -55,7 +56,9 @@ export default {
             .where(
                 and(
                     not(eq(tables.users.discord_id, interaction.user.id)),
+                    // @ts-ignore
                     notInArray(tables.users.discord_id, firsts),
+                    // @ts-ignore
                     notInArray(tables.users.discord_id, seconds),
                 ),
             );

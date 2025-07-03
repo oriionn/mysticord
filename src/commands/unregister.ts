@@ -39,6 +39,7 @@ export default {
 
             return await interaction.reply({
                 content: Messages.CONFIRM_REGISTER,
+                // @ts-ignore
                 components: [row],
             });
         }

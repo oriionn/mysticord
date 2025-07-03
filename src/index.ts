@@ -55,7 +55,7 @@ for (const file of commandsFiles) {
     }
 }
 
-const rest = new REST().setToken(process.env.TOKEN);
+const rest = new REST().setToken(process.env.TOKEN!);
 
 client.once(Events.ClientReady, async (readyClient) => {
     logger.info("Ready! Logged in as {tag}", {
@@ -75,7 +75,7 @@ client.once(Events.ClientReady, async (readyClient) => {
         });
 
         const data = await rest.put(
-            Routes.applicationCommands(process.env.CLIENT_ID),
+            Routes.applicationCommands(process.env.CLIENT_ID!),
             // @ts-ignore
             { body: commands },
         );

@@ -57,7 +57,7 @@ export default async function (message: Message) {
         };
 
         await db.insert(tables.level).values(l);
-        levels.push(l);
+        levels.push(l as typeof tables.level.$inferSelect);
     }
 
     let level = levels[0];
@@ -81,8 +81,10 @@ export default async function (message: Message) {
     if (getLevel(level!.xp!).level >= 3) {
         attachments = message.attachments.map(
             (a) =>
+                // @ts-ignore
                 new AttachmentBuilder(a.attachment, {
                     name: a.name,
+                    // @ts-ignore
                     description: a.description,
                     spoiler: a.spoiler,
                 }),

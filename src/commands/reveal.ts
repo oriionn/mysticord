@@ -28,6 +28,7 @@ export default {
 
         return await interaction.reply({
             content: Messages.CONFIRM_REVEAL,
+            // @ts-ignore
             components: [row],
         });
     },

@@ -22,6 +22,7 @@ export default {
         ],
     },
     async execute(interaction: CommandInteraction) {
+        // @ts-ignore
         let username = interaction.options.getString("username");
 
         let usernames = await db
