@@ -1,4 +1,3 @@
-import { join } from "path";
 import {
     Client,
     Events,
@@ -9,17 +8,17 @@ import {
     ChannelType,
     Partials,
 } from "discord.js";
-import { readdirSync } from "fs";
+
+// Events
 import buttonEvent from "./events/button";
 import messageEvent from "./events/message";
 import readyEvent from "./events/ready";
 import commandEvent from "./events/command";
+
+// Utilities
 import { Logger } from "./utils/log";
 import { loadCommands } from "./utils/commands";
-
-// Logs
 await Logger.init();
-const logger = Logger.get("mysticord");
 
 const client = new Client({
     // @ts-ignore
@@ -32,7 +31,6 @@ const client = new Client({
 client.commands = new Collection();
 // @ts-ignore
 client.cooldown = new Collection();
-
 await loadCommands(client);
 
 client.once(Events.ClientReady, readyEvent);
