@@ -1,0 +1,1 @@
+ALTER TABLE `tictactoe` RENAME COLUMN "gameId" TO "game_id";

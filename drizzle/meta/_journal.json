@@ -36,6 +36,55 @@
       "when": 1751465706282,
       "tag": "0004_happy_orphan",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1751547785076,
+      "tag": "0005_illegal_annihilus",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1751548118652,
+      "tag": "0006_secret_lockheed",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1751548715285,
+      "tag": "0007_simple_tombstone",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1751549556705,
+      "tag": "0008_unique_senator_kelly",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1751549918888,
+      "tag": "0009_certain_wallop",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1751550513855,
+      "tag": "0010_gigantic_maddog",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1751551834542,
+      "tag": "0011_curvy_selene",
+      "breakpoints": true
     }
   ]
 }

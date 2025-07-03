@@ -28,5 +28,16 @@ export enum Messages {
     REVEAL_SENT = ":white_check_mark: | The request has been sent to your contact.",
     REVEAL_IMPOSSIBLE = ":x: | I couldn't ask him.",
     REVEAL_IMPOSSIBLE_BIS = ":x: | I wasn't able to reveal your identity.",
-    REVEALED = ":white_check_mark: | The identity of your contact is `"
+    REVEALED = ":white_check_mark: | The identity of your contact is `",
+
+    ASK_TTT = "❓ | Would you like to play tic-tac-toe with your contact?",
+    IMPOSSIBLE_TTT = ":x: | It was impossible to send him the tic-tac-toe.",
+    ACCEPTED_TTT = ":white_check_mark: | Your contact has accepted your tic-tac-toe game!",
+    ACCEPTED_TTT_BIS = ":white_check_mark: | You've accepted a game of tic-tac-toe!",
+    YOUR_TURN_TTT = "It's your turn.",
+    OTHER_TURN_TTT = "It's the turn of your contact.",
+    NOT_YOUR_TURN_TTT = ":x: | It's not your turn!",
+    WON_TTT = ":tada: | You've won against your contact!",
+    LOST_TTT = ":tired_face: | You have lost to your contact!",
+    EQUALITY_TTT = ":tada: | Equality !",
 }
