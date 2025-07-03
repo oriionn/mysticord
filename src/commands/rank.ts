@@ -28,7 +28,6 @@ export default {
 
         let {
             level: ln,
-            next_threshold,
             current_threshold,
         } = getLevel(level.xp!);
         let percentage =

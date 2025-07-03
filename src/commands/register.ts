@@ -1,11 +1,7 @@
-import {
-    CommandInteraction,
-    SlashCommandBuilder,
-    type Interaction,
-} from "discord.js";
+import { CommandInteraction } from "discord.js";
 import db from "../database";
 import tables from "../database/tables";
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { Messages } from "../constants";
 
 export default {

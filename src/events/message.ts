@@ -1,8 +1,4 @@
-import {
-    AttachmentBuilder,
-    type AttachmentFlagsBitField,
-    type Message,
-} from "discord.js";
+import { AttachmentBuilder, type Message } from "discord.js";
 import db from "../database";
 import tables from "../database/tables";
 import { eq, or } from "drizzle-orm";

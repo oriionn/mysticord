@@ -1,6 +1,4 @@
 import { join } from "path";
-import { configure, getConsoleSink, getLogger } from "@logtape/logtape";
-import { prettyFormatter } from "@logtape/pretty";
 import {
     Client,
     Events,
@@ -12,23 +10,9 @@ import {
     Routes,
     ChannelType,
     Partials,
-    ButtonInteraction,
-    AttachmentBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-    ActionRowBuilder,
 } from "discord.js";
 import { readdirSync } from "fs";
-import db from "./database";
-import tables from "./database/tables";
-import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "./constants";
-import { getChatSessions, stopChatSessions } from "./utils/chats";
-import { randomInt } from "./utils/random";
-import { getLevel } from "./utils/level";
-import { log } from "console";
-import { sendVoice } from "./utils/voice";
-import { getFileSink } from "@logtape/file";
 import buttonEvent from "./events/button";
 import messageEvent from "./events/message";
 import { Logger } from "./utils/log";

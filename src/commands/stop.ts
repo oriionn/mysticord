@@ -1,13 +1,6 @@
 import {
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
     type CommandInteraction,
 } from "discord.js";
-import db from "../database";
-import tables from "../database/tables";
-import { randomInt } from "../utils/random";
-import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "../constants";
 import { getChatSessions, stopChatSessions } from "../utils/chats";
 
