@@ -16,7 +16,7 @@ export async function getChatSessions(userId: string) {
 export async function stopChatSessions(user: User, client: Client) {
     let sessions = await getChatSessions(user.id);
     if (sessions.length !== 0) {
-        let session = sessions[0];
+        let contact = getContact(sessions, user.id);
 
         await db
             .delete(tables.chats)
@@ -27,11 +27,6 @@ export async function stopChatSessions(user: User, client: Client) {
                 ),
             );
 
-        let contact = session!.first;
-        if (contact === user.id) {
-            contact = session!.second;
-        }
-
         try {
             let contactUser = client.users.cache.get(contact!);
             let dm = await contactUser?.createDM();
@@ -41,4 +36,17 @@ export async function stopChatSessions(user: User, client: Client) {
             console.log(e);
         }
     }
+}
+
+export function getContact(
+    sessions: (typeof tables.chats.$inferSelect)[],
+    userId: string,
+) {
+    let session = sessions[0];
+    let contact = session!.first;
+    if (contact === userId) {
+        contact = session!.second;
+    }
+
+    return contact;
 }

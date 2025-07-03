@@ -8,7 +8,6 @@ import { randomInt } from "../utils/random";
 
 export default async function (interaction: ButtonInteraction) {
     await stopChatSessions(interaction.user, interaction.client);
-
     if (interaction.message.deletable) interaction.message.delete();
 
     let chats = await db.select().from(tables.chats);

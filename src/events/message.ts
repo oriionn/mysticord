@@ -5,6 +5,7 @@ import { eq, or } from "drizzle-orm";
 import { Messages } from "../constants";
 import { getLevel } from "../utils/level";
 import { sendVoice } from "../utils/voice";
+import { getContact } from "../utils/chats";
 
 export default async function (message: Message) {
     let sessions = await db
@@ -24,13 +25,7 @@ export default async function (message: Message) {
             content: Messages.MESSAGE_TOO_LONG,
         });
 
-    let session = sessions[0];
-
-    let contact = session!.first;
-    if (session!.first === message.author.id) {
-        contact = session!.second;
-    }
-
+    let contact = getContact(sessions, message.author.id);
     let discordContact = message.client.users.cache.get(contact!);
 
     let usernames = await db
