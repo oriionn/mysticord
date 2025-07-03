@@ -9,7 +9,7 @@ import tables from "../database/tables";
 import { randomInt } from "../utils/random";
 import { and, eq, not, notInArray, or } from "drizzle-orm";
 import { Messages } from "../constants";
-import { getAllAvailableUser, getChatSessions, hasChat } from "../utils/chats";
+import { getAllAvailableUser, hasNoChat } from "../utils/chats";
 
 export default {
     data: {
@@ -29,7 +29,7 @@ export default {
             return await interaction.reply(Messages.NOT_REGISTERED);
         }
 
-        if (!(await hasChat(interaction.user))) {
+        if (!(await hasNoChat(interaction.user))) {
             const confirm = new ButtonBuilder()
                 .setCustomId("reroll")
                 .setLabel("Reroll")

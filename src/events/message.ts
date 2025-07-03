@@ -5,18 +5,10 @@ import { eq, or } from "drizzle-orm";
 import { Messages } from "../constants";
 import { getLevel } from "../utils/level";
 import { sendVoice } from "../utils/voice";
-import { getContact } from "../utils/chats";
+import { getChatSessions, getContact } from "../utils/chats";
 
 export default async function (message: Message) {
-    let sessions = await db
-        .select()
-        .from(tables.chats)
-        .where(
-            or(
-                eq(tables.chats.first, message.author.id),
-                eq(tables.chats.second, message.author.id),
-            ),
-        );
+    let sessions = await getChatSessions(message.author.id);
 
     if (sessions.length === 0) return message.reply(Messages.NO_CHAT_SESSIONS);
 

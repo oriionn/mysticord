@@ -8,7 +8,7 @@ import db from "../database";
 import tables from "../database/tables";
 import { eq } from "drizzle-orm";
 import { Messages } from "../constants";
-import { hasChat } from "../utils/chats";
+import { hasNoChat } from "../utils/chats";
 
 export default {
     data: {
@@ -27,7 +27,7 @@ export default {
             return await interaction.reply(Messages.NOT_REGISTERED);
         }
 
-        if (!(await hasChat(interaction.user))) {
+        if (!(await hasNoChat(interaction.user))) {
             const confirm = new ButtonBuilder()
                 .setCustomId("unregister")
                 .setLabel("Unregister")

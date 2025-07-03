@@ -72,7 +72,7 @@ export async function getAllAvailableUser(userId: string) {
     return users;
 }
 
-export async function hasChat(user: User) {
+export async function hasNoChat(user: User) {
     let sessions = await getChatSessions(user.id);
     return sessions.length === 0;
 }
