@@ -31,32 +31,11 @@ import { sendVoice } from "./utils/voice";
 import { getFileSink } from "@logtape/file";
 import buttonEvent from "./events/button";
 import messageEvent from "./events/message";
+import { Logger } from "./utils/log";
 
 // Logs
-await configure({
-    sinks: {
-        console: getConsoleSink({ formatter: prettyFormatter }),
-        file: getFileSink("mysticord.log", {
-            lazy: true,
-        }),
-    },
-    loggers: [
-        {
-            category: "mysticord",
-            sinks: ["console", "file"],
-        },
-        {
-            category: "discord.js",
-            sinks: ["console", "file"],
-        },
-        {
-            category: ["logtape", "meta"],
-            sinks: [],
-        },
-    ],
-});
-
-const logger = getLogger(["mysticord"]);
+await Logger.init();
+const logger = Logger.get("mysticord");
 
 const client = new Client({
     // @ts-ignore
@@ -148,7 +127,7 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
         return;
     }
 
-    let loggerr = getLogger(["discord.js"]);
+    let loggerr = Logger.get("discord.js");
     loggerr.trace("User {user} executed {command}", {
         user: interaction.user.tag,
         command: `/${interaction.commandName}`,
