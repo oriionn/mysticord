@@ -2,7 +2,8 @@
 This is a Discord bot that is added in dm and lets you meet people randomly.
 This project was made as part of the Summer of Making, for the Converge which consists in making a bot.
 
-To test the bot, go to the Discord [Mysticord](https://discord.gg/q8Ra9vWJAV)
+To test the bot, go to the Discord [Mysticord](https://discord.gg/q8Ra9vWJAV).
+
 The Discord will be down when the event manager contacts me.
 
 <details>
