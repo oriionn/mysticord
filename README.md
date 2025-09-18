@@ -18,6 +18,18 @@ The project has multiple features, such as :
 - Sending attachments (Only available from level 3 upwards)
 - Native voice message integration (Only available from level 5 upwards)
 
+### Commands
+- `/help`: Displays the commands list
+- `/perks`: Displays a list of benefits that you unlock as you progress through the level system
+- `/rank`: Displays your current level
+- `/register`: Registers you in the list of people people can meet
+- `/reveal`: Ask the person you're talking to if they want to reveal their identity
+- `/roll`: Find someone to talk to randomly
+- `/stop`: Stop the discussion
+- `/tictactoe`: Offer to play tic tac toe with the person you're talking to.
+- `/unregister`: Remove you from the list of people people can meet.
+- `/username`: Change your anonymously username
+
 ## Installation
 ### Prerequisites
 - Bun
